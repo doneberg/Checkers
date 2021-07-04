@@ -10,12 +10,13 @@ import ui.PieceType;
  * @version 1.0
  */
 public class CheckersLogic {
-	private static boolean playerOneTurn;
+	private boolean playerOneTurn;
 	private boolean computerPlayer = false;
 	private boolean guiEnabled = false;
 	private CheckersComputerPlayer compy;
 	private CheckersGUI gui;
 	private char[][] brain;
+	private boolean noComputerMoves = false;
 	BoardType boardType;
 	private final char part = '|';
 	private final int standard = 8;
@@ -154,7 +155,7 @@ public class CheckersLogic {
 	 * returns char signifying whose turn it is
 	 * @return X or O depending on whose turn 
 	 */
-	public char Turn() {	
+	public char turn() {	
 		if (playerOneTurn) {
 			return 'X';
 		}
@@ -199,14 +200,18 @@ public class CheckersLogic {
 			if(!isGameOver()) {
 			if (!playerOneTurn && computerPlayer) {
 				
-				compy.move();
+				if(!compy.move()) {
+					this.ComputerLoses();
+				}
 				if (guiEnabled) {
 					ComputerMoveConverter();
 					SquareConverter();	
 					}
 				
-				changeTurn();		
-				System.out.println(this.toString());
+				
+				gui.gameOver();
+				changeTurn();
+				//System.out.println(this.toString());
 			}
 			}
 	}
@@ -299,43 +304,47 @@ public class CheckersLogic {
 		if(!(numberCheck(startRow) || numberCheck(startColumn) 
 				||numberCheck(endRow) 
 				||numberCheck(endColumn))) {
+			//System.out.println("test failed!!!000");
 			return false;
 		}
 		
 		if (LegalMove(startRow, startColumn, endRow, endColumn)) {
 			Move(startRow, startColumn, endRow, endColumn);
-			System.out.println("legal move ------");
+			//System.out.println("legal move ------");
 			return true;
 			}
 		
 		
 		if(LegalJump(startRow, startColumn, endRow, endColumn)) {
 			Jump(startRow, startColumn, endRow, endColumn);
-			System.out.println("legal jump ------");
+			//System.out.println("legal jump ------" + "\n" + 
+			//startRow  + "\n" + startColumn  + "\n" + endRow  + "\n" + endColumn);
+			
 			if (computerPlayer) {
 				if(endRow < standard - 1) {
 					
 				if(endColumn > 1)
 				if(LegalJump(endRow, endColumn, endRow + 2, endColumn - 2)) {
 					Jump(endRow, endColumn, endRow + 2, endColumn - 2);
-					System.out.println("DOUBLE jump WOW------");
+					//System.out.println("DOUBLE jump WOW------");
 					
 				}
 				
 				else if(endColumn < standard - 1) 
 				if(LegalJump(endRow, endColumn, endRow + 2, endColumn + 2)) {
 					Jump(endRow, endColumn, endRow + 2, endColumn + 2);
-					System.out.println("DOUBLE jump WOW------");
+					//System.out.println("DOUBLE jump WOW------");
 			
 				}	
 				}
-			return true;
 			}
+			return true;
+			
 			}
 	if(!computerPlayer && !guiEnabled) {
 		if(LegalDoubleJump(startRow, startColumn, endRow, endColumn)) {
 			Move(startRow, startColumn, endRow, endColumn);
-			System.out.println("legal dble ------");
+			//System.out.println("legal dble ------");
 			return true;	
 		}
 	}
@@ -776,7 +785,7 @@ public boolean isGameOver() {
 	if(guiEnabled) {
 		SquareConverter();
 	}
-	if(!MovesLeft()) {
+	if(!MovesLeft() || noComputerMoves) {
 		return true;
 	}
 	
@@ -808,6 +817,9 @@ public boolean numberCheck(int number) {
 	}
 	return true;
 }
+public void ComputerLoses() {
+	noComputerMoves = true;
+}
 /**
  * returns a char signifying whether player X or player O was the winner of the game
  * @return
@@ -823,7 +835,6 @@ public char Winner(){
  * flips whose turn it is
  */
 public void changeTurn() {
-	//System.out.println("changeTurn-----000");
 	if (playerOneTurn) {
 		playerOneTurn = false;
 	}
