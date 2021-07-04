@@ -21,6 +21,8 @@ public class CheckersComputerPlayer {
 	MoveResult move;
 	Random rand = new Random();
 	Piece piece;
+	boolean[][] moveTried;
+	boolean found;
 
 	/**
 	 * Constructor for text based game
@@ -37,18 +39,34 @@ public class CheckersComputerPlayer {
 	 * @return if operation was successful
 	 */
 	public boolean move() {
+		for(int i = 0; i <= standard - 1; i++) {
+			for(int j = 0; j <= standard-1; j++) {
+				if(brain[i][j] == 'o') {
 
-		for (int i = rand.nextInt(standard); i >= 0; i = rand.nextInt(standard)) {
-			for (int j = 0; j < standard; j++) {
-				for (int k = standard-1; k > 0; k--) {
-					for (int l = standard-1; l > 0; l--) {
-					//System.out.println("move() = " + j + " "+ i + " " + l + " " + k);
-					  if(logic.parseMove(i, j, k, l)) { 
-						  return true;
-					  }	
-					}
-				}	
+			if((j < (standard-1)) && logic.parseMove(i, j, i + 1, j + 1)) {
+				//System.out.println("right");
+				return true;
 			}
-		}return false;	
+			
+			if(j > 0 && logic.parseMove(i, j, i + 1, j - 1)) {
+				//System.out.println("left");
+				return true;
+			}
+			
+			if((i < 6 && j < 6) && logic.parseMove(i, j, i + 2, j + 2)) {
+				//System.out.println(" jump right");
+				return true;
+			}
+			
+			if((i < 6 && j > 1) && logic.parseMove(i, j, i + 2, j - 2)) {
+				//System.out.println(" jump left");
+				return true;
+			}
+				}
+		
+		}
+		}
+		return false;
 	}
+
 }
