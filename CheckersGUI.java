@@ -206,8 +206,9 @@ public class CheckersGUI extends Application {
 		
 		int x0 = toBoard(piece.getOldX());
 		int y0 = toBoard(piece.getOldY());
-
-		if (board[newY][newX].hasPiece() || isLightSquare(newY, newX) 
+		
+		if (newY > (standard-1) || newX > (standard-1) || newY < 0 || newX < 0
+				|| board[newY][newX].hasPiece() || isLightSquare(newY, newX) 
 				|| (piece.getType() != PieceType.RED && logic.getPlayerOneTurn())
 				|| (piece.getType() != PieceType.BLACK && !logic.getPlayerOneTurn()) ) {
 			return new MoveResult(MoveType.NONE);
