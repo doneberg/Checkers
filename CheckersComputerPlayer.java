@@ -21,8 +21,6 @@ public class CheckersComputerPlayer {
 	MoveResult move;
 	Random rand = new Random();
 	Piece piece;
-	boolean[][] moveTried;
-	boolean found;
 
 	/**
 	 * Constructor for text based game
