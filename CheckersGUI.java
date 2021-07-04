@@ -131,19 +131,16 @@ public class CheckersGUI extends Application {
 		switch(result.getType()) {
 		
 		case NONE:
-			System.out.println("none");
 			piece.reset();
 			break;
 			
 		case REGULAR:
-			System.out.println("reg");
 			piece.move(newY, newX); //move piece
 			board[y0][x0].setPiece(null); //move representation of piece
 			board[newY][newX].setPiece(piece);	
 			break;
 			
 		case JUMP:
-			System.out.println("jump");
 			piece.move(newY, newX);
 			board[y0][x0].setPiece(null);
 			board[newY][newX].setPiece(piece);
@@ -160,7 +157,6 @@ public class CheckersGUI extends Application {
 					
 					if (result.getType() == MoveType.JUMP) {
 						 if (pop.display(doubleJump)){
-							System.out.println("hello hello 000");
 							mover(result, piece, newY - 2, newX - 2);
 							
 							    }		
@@ -172,7 +168,6 @@ public class CheckersGUI extends Application {
 						
 						if (result.getType() == MoveType.JUMP) {
 							 if (pop.display(doubleJump)){
-							System.out.println("hello hello 111");
 							mover(result, piece, newY - 2, newX + 2);
 							
 							}		
@@ -220,7 +215,6 @@ public class CheckersGUI extends Application {
 		
 		if (Math.abs(newX - x0) == 1 
 				&& newY - y0 == piece.getType().direction) {
-			System.out.println("reg000");
 			return new MoveResult(MoveType.REGULAR);
 		}
 		
@@ -230,11 +224,9 @@ public class CheckersGUI extends Application {
 			
 			if(board[y1][x1].hasPiece() 
 					&& !board[y1][x1].getPiece().getType().equals(piece.getType())) {
-				System.out.println("jump000");
 				return new MoveResult(MoveType.JUMP, board[y1][x1].getPiece());
 			}
 		}
-		System.out.println("none000");
 		return new MoveResult(MoveType.NONE);
 	}
 	
